@@ -20,7 +20,7 @@ class Config:
         ws_prefix = 'ws' if self.env == 'dev' else 'wss'
         self.graphql_endpoint = f"{prefix}://{start_url}/graphql"
         self.wss_endpoint = f"{ws_prefix}://{start_url }/graphql-ws"
-        if env is None:
+        if jwt_key is None:
             with open('access_keys.json') as f:
                 keys = json.load(f)
                 print(f"KEY: {keys.get('jwt_key')}")

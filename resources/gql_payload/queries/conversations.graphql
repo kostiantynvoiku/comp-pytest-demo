@@ -1,0 +1,39 @@
+query conversations($tagsFilter: String!) {
+  conversations(
+    tagsFilter: [$tagsFilter]
+    first: 2
+    orderBy: { direction: DESC, field: CREATED_AT }
+  ) {
+    edges {
+      node {
+        title
+        createdAt
+        tags
+        creator {
+          apiId
+        }
+        id
+        lastMessage {
+          conversation {
+            id
+          }
+        }
+        participants(first: 2) {
+          edges {
+            node {
+              apiId
+            }
+          }
+        }
+      }
+      unreadCount
+      cursor
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+      hasPreviousPage
+      startCursor
+    }
+  }
+}

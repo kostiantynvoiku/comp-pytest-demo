@@ -1,0 +1,10 @@
+backoff
+gql==3.0.0a6
+pytest
+pytest-html
+pytest-html-reporter
+pytest-metadata
+requests
+websockets
+pytest-ruff
+pyjwt

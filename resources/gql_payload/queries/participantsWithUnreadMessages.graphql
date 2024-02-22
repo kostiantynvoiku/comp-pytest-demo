@@ -1,0 +1,15 @@
+query participantsWithUnreadMessages($timestamp: Int!) {
+  participantsWithUnreadMessages(unreadFrom: $timestamp, last: 2) {
+    edges {
+      node {
+        id
+        conversation {
+          id
+        }
+        user {
+          apiId
+        }
+      }
+    }
+  }
+}

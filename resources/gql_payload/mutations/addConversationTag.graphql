@@ -1,0 +1,5 @@
+mutation addConversationTag($conversationApiId: String!, $tagName: String!) {
+  addConversationTag(
+    input: { conversationApiId: $conversationApiId, tagName: $tagName }
+  )
+}

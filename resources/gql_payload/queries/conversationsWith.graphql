@@ -1,0 +1,14 @@
+query conversationsWith($user_id: String!, $tagsFilter: String!) {
+  conversationsWith(
+    participants: [$user_id]
+    tagsFilter: [$tagsFilter]
+    first: 10
+  ) {
+    edges {
+      node {
+        id
+        tags
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+subscription {
+  messageDelivered {
+    message {
+      ... on TextMessage {
+        id
+      }
+    }
+    recipient {
+      apiId
+    }
+  }
+}

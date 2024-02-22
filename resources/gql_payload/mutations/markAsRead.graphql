@@ -1,0 +1,12 @@
+mutation markAsRead($message_id: ID!) {
+  markAsRead(input: { messageId: $message_id }) {
+    message {
+      ... on TextMessage {
+        id
+        readBy {
+          apiId
+        }
+      }
+    }
+  }
+}

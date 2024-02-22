@@ -1,0 +1,18 @@
+query messagesByConversation($conversation_id: ID!) {
+  messagesByConversation(conversationId: $conversation_id, last: 1) {
+    edges {
+      node {
+        ... on TextMessage {
+          id
+          conversation {
+            id
+          }
+          body
+          deliveredTo {
+            apiId
+          }
+        }
+      }
+    }
+  }
+}

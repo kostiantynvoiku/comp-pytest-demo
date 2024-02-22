@@ -1,0 +1,8 @@
+{
+    userMeta {
+        unreadCount
+        user {
+            apiId
+        }
+    }
+}

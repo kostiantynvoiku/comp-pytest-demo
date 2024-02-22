@@ -1,0 +1,14 @@
+mutation sendMessage($conversation_id: ID!, $message: String!) {
+  sendTextMessage(
+    input: {
+      body: $message
+      conversationId: $conversation_id
+    }
+  ) {
+    message {
+      id
+      createdAt
+      body
+    }
+  }
+}

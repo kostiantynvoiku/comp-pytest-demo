@@ -1,0 +1,10 @@
+mutation createNewConversation($participant: String!) {
+  createConversation(
+    input: { participants: [$participant], title: "Test conversation" }
+  ) {
+    conversation {
+      id
+      apiId
+    }
+  }
+}

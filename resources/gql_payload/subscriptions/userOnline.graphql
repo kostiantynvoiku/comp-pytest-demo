@@ -1,0 +1,11 @@
+subscription userOnline($conversation_id: [ID!]!) {
+  userOnline(conversationIds: $conversation_id) {
+    conversation {
+      id
+    }
+    user {
+      apiId
+      isOnline
+    }
+  }
+}

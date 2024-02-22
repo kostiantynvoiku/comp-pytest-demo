@@ -1,0 +1,24 @@
+mutation createNewConversation($participant: String!) {
+  createConversation(
+    input: { participants: [$participant], title: "Test conversation" }
+  ) {
+    conversation {
+      createdAt
+      creator {
+          apiId
+          id
+          isOnline
+          lastSeen
+      }
+      id
+      participants (first: 2){
+        edges {
+          node {
+            apiId
+          }
+        }
+      }
+      title
+    }
+  }
+}

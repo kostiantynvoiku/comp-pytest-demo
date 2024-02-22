@@ -1,0 +1,5 @@
+mutation removeConversationTag($conversationApiId: String!, $tagName: String!) {
+  removeConversationTag(
+    input: { conversationApiId: $conversationApiId, tagName: $tagName }
+  )
+}

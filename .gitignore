@@ -1,0 +1,10 @@
+.pytest_cache
+.idea
+tests/__pycache__
+tests/*/__pycache__
+assets
+report
+venv
+results*.html
+.DS_Store
+notes.txt

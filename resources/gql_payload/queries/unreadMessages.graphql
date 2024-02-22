@@ -1,0 +1,26 @@
+query unreadMessages($conversation_id: ID!){
+    unreadMessages(
+        conversationId: $conversation_id,
+        last: 1){
+        edges{
+            node {
+                ... on Node {
+                    id
+                }
+                ... on TextMessage {
+                    body
+                }
+                ... on AttachmentMessage {
+                    attachments(first: 1) {
+                        edges {
+                            node {
+                                id
+                                url
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

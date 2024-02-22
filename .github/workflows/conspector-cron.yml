@@ -1,0 +1,117 @@
+name: ⏰ Scheduled Runs
+
+on:
+  schedule:
+    - cron: '0 0-1 * * *'
+
+jobs:
+  set_vars:
+    name: 📦 SET VARIABLES
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⏰ SET VARIABLES
+        id: vars
+        run: |
+          time=$(date +'%H')
+          echo "time=$time" >> $GITHUB_OUTPUT        
+          if [[ "$time" == "00" ]]
+          then 
+            echo "branch=develop" >> $GITHUB_OUTPUT
+            echo "startUrl=mercury.sandbox.starofservice.com" >> $GITHUB_OUTPUT
+            echo "jwt=JWT_KEY_DEV" >> $GITHUB_OUTPUT
+          elif [[ "$time" == "01" ]]
+          then
+            echo "branch=master" >> $GITHUB_OUTPUT
+            echo "startUrl=mercury.starofservice.com" >> $GITHUB_OUTPUT
+            echo "jwt=JWT_KEY_PROD" >> $GITHUB_OUTPUT
+          fi
+    outputs:
+      branch: ${{ steps.vars.outputs.branch }}
+      startUrl: ${{ steps.vars.outputs.startUrl }}
+      jwt: ${{ steps.vars.outputs.jwt }}
+
+  conspector:
+    name: 🔎 CONSPECTOR
+    runs-on: ubuntu-latest
+    needs: set_vars
+    steps:
+      - name: 🛎 Checkout branch
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ needs.set_vars.outputs.branch }}
+      - name: ⚙️ Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+          cache: 'pip'
+      - name: ⚙️ Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: 🧪 Run tests
+        id: pytest
+        uses: dariocurr/pytest-summary@main
+        with:
+          show: "fail, pass"
+          options: --start_url '${{ needs.set_vars.outputs.startUrl }}' --jwt_key '${{ secrets[needs.set_vars.outputs.jwt] }}'
+
+      - name: 📦 Define vars for Slack
+        if: always()
+        run: |
+          if [[ "${{ steps.pytest.conclusion }}" == "failure" ]]
+          then
+            echo "SLACK_COLOR=f71414" >> $GITHUB_ENV
+          else
+            echo "SLACK_COLOR=28a745" >> $GITHUB_ENV
+          fi
+      - name: 📩 Post message to Slack
+        if: always()
+        uses: slackapi/slack-github-action@v1.23.0
+        with:
+          channel-id: 'C2V09T50R'
+          payload: |
+            {
+              "text": "",
+              "dispatch_action": true,
+              "attachments": [
+                {
+                  "color": "${{ env.SLACK_COLOR }}",
+                  "blocks": [
+                    {
+                      "type": "section",
+                      "text": {
+                        "type": "mrkdwn",
+                        "text": "🧪 Run *<${{ env.BUILD_URL }}|#${{ github.run_number }}>* finished on `${{ needs.set_vars.outputs.branch }}` with the status: *${{ steps.pytest.conclusion }}*"
+                      }
+                    },
+                    {
+                      "type": "context",
+                      "elements": [
+                        {
+                          "type": "mrkdwn",
+                          "text": "🤖️ Triggered by ${{ github.event_name }}"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "actions",
+                      "elements": [
+                        {
+                          "type": "button",
+                          "text": {
+                            "type": "plain_text",
+                            "text": "BUILD PAGE",
+                            "emoji": true
+                          },
+                          "url": "${{ env.BUILD_URL }}"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+
+env:
+    SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+    BUILD_URL: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"

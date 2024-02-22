@@ -11,7 +11,6 @@ class Config:
             self.env = {
                 'localhost:8009': 'dev',
                 'mercury.sandbox.starofservice.com': 'sandbox',
-                'mercury.starofservice.com': 'prod'
             }[start_url]
         else:
             self.env = env

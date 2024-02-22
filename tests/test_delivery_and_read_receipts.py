@@ -25,7 +25,7 @@ class DeliveryReadReceiptsTests:
         q = Queries()
         conversation_id = get_messages_by_conversation['messagesByConversation']['edges'][0]['node'][
             'conversation']['id']
-        result, _ = q.execute_gql(endpoint=env_config.mercury_endpoint,
+        result, _ = q.execute_gql(endpoint=env_config.graphql_endpoint,
                                         user=user2,
                                         headers=env_config.gql_headers,
                                         raw_body='resources/gql_payload/queries/messagesByConversation.graphql',
@@ -52,7 +52,7 @@ class DeliveryReadReceiptsTests:
         _, user2 = create_users
         event_name = 'markAsRead'
         params = {"message_id": message_id}
-        result, elapsed = q.execute_gql(endpoint=env_config.mercury_endpoint,
+        result, elapsed = q.execute_gql(endpoint=env_config.graphql_endpoint,
                                         user=user2,
                                         headers=env_config.gql_headers,
                                         raw_body=f'resources/gql_payload/mutations/{event_name}.graphql',
@@ -178,7 +178,7 @@ class DeliveryReadReceiptsTests:
     def test_as_a_participant_i_want_to_get_my_unread_messages(self, env_config, create_users, create_conversation,
                                                                send_text_message):
         """
-        :param env_config: fetch the environment configs: mercury_endpoint, domain, ect.
+        :param env_config: fetch the environment configs: graphql_endpoint, domain, ect.
         :param create_users: fetch auth data and uuid of the users.
         :param create_conversation: fetch conversation_id.
 
@@ -195,7 +195,7 @@ class DeliveryReadReceiptsTests:
         message_id = send_text_message['sendTextMessage']['message']['id']
         _, user2 = create_users
         event_name = "unreadMessages"
-        result, elapsed = queries.execute_gql(endpoint=env_config.mercury_endpoint,
+        result, elapsed = queries.execute_gql(endpoint=env_config.graphql_endpoint,
                                               user=user2,
                                               headers=env_config.gql_headers,
                                               raw_body='resources/gql_payload/queries/unreadMessages.graphql',

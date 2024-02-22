@@ -14,7 +14,8 @@ def pytest_addoption(parser):
     parser.addoption(
         "--start_url",
         action="store",
-        help="Domain to run test against"
+        help="Domain to run test against",
+        default="mercury.sandbox.starofservice.com"
     )
     parser.addoption(
         '--jwt_key',
@@ -60,7 +61,7 @@ def create_conversation(env_config, create_users):
     queries = Queries()
     user1, user2 = create_users
     params = {"participant": user2['uuid']}
-    result, _ = queries.execute_gql(endpoint=env_config.mercury_endpoint,
+    result, _ = queries.execute_gql(endpoint=env_config.graphql_endpoint,
                                     user=user1,
                                     headers=env_config.gql_headers,
                                     raw_body='resources/gql_payload/mutations/createConversation_fixture_cut.graphql',
@@ -78,7 +79,7 @@ def send_text_message(env_config, create_users, create_conversation):
     message = "This is my text message"
     params = {"conversation_id": conversation_id,
               "message": message}
-    result, _ = queries.execute_gql(endpoint=env_config.mercury_endpoint,
+    result, _ = queries.execute_gql(endpoint=env_config.graphql_endpoint,
                                     user=user1,
                                     headers=env_config.gql_headers,
                                     raw_body='resources/gql_payload/mutations/sendTextMessage_fixture_cut.graphql',
@@ -96,7 +97,7 @@ def get_messages_by_conversation(env_config, create_users, create_conversation, 
     message = "This is my text message"
     params = {"conversation_id": conversation_id,
               "message": message}
-    result, _ = queries.execute_gql(endpoint=env_config.mercury_endpoint,
+    result, _ = queries.execute_gql(endpoint=env_config.graphql_endpoint,
                                     user=user2,
                                     headers=env_config.gql_headers,
                                     raw_body='resources/gql_payload/queries/messagesByConversation.graphql',

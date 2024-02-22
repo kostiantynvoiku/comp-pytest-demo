@@ -1,4 +1,5 @@
 import re
+import json
 
 
 class Config:
@@ -17,9 +18,15 @@ class Config:
 
         prefix = 'http' if self.env == 'dev' else 'https'
         ws_prefix = 'ws' if self.env == 'dev' else 'wss'
-        self.mercury_endpoint = f"{prefix}://{start_url}/graphql"
+        self.graphql_endpoint = f"{prefix}://{start_url}/graphql"
         self.wss_endpoint = f"{ws_prefix}://{start_url }/graphql-ws"
-        self.jwt_key = jwt_key
+        if env is None:
+            with open('access_keys.json') as f:
+                keys = json.load(f)
+                print(f"KEY: {keys.get('jwt_key')}")
+            self.jwt_key = keys.get('jwt_key', None)
+        else:
+            self.jwt_key = jwt_key
 
         self.gql_headers = {
             'Authorization': '',

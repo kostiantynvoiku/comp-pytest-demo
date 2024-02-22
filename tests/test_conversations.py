@@ -10,7 +10,7 @@ class ConversationTests:
     @mark.create_conversation
     def test_as_a_system_i_want_to_create_a_conversation_between_users(self, env_config, create_users):
         """
-        :param env_config: fetch the environment configs: mercury_endpoint, domain, ect.
+        :param env_config: fetch the environment configs: graphql_endpoint, domain, ect.
         :param create_users: fetch auth data and uuid of the users.
 
         TEST CASE:
@@ -26,7 +26,7 @@ class ConversationTests:
         time_now = datetime.utcnow()
         time_now_formatted = datetime.utcnow().strftime('%Y-%m-%dT%H:%M')
         event_name = 'createConversation'
-        result, elapsed = queries.execute_gql(endpoint=env_config.mercury_endpoint,
+        result, elapsed = queries.execute_gql(endpoint=env_config.graphql_endpoint,
                                               user=user1,
                                               headers=env_config.gql_headers,
                                               raw_body=f'resources/gql_payload/mutations/{event_name}.graphql',
@@ -51,7 +51,7 @@ class ConversationTests:
     @mark.get_conversations
     def test_as_a_participant_i_want_to_get_all_my_conversations(self, env_config, create_users, create_conversation):
         """
-        :param env_config: fetch the environment configs: mercury_endpoint, domain, ect.
+        :param env_config: fetch the environment configs: graphql_endpoint, domain, ect.
         :param create_users: fetch auth data and uuid of the users.
         :param create_conversation: fetch conversation_id.
 
@@ -66,7 +66,7 @@ class ConversationTests:
         user1, user2 = create_users
         event_name = 'conversations'
         params = {"conversation_id": conversation_id, "tagsFilter": "-"}
-        result, elapsed = queries.execute_gql(endpoint=env_config.mercury_endpoint,
+        result, elapsed = queries.execute_gql(endpoint=env_config.graphql_endpoint,
                                               user=user1,
                                               headers=env_config.gql_headers,
                                               raw_body=f'resources/gql_payload/queries/{event_name}.graphql',
@@ -98,7 +98,7 @@ class ConversationTests:
                                                                                             create_users,
                                                                                             create_conversation):
         """
-        :param env_config: fetch the environment configs: mercury_endpoint, domain, ect.
+        :param env_config: fetch the environment configs: graphql_endpoint, domain, ect.
         :param create_users: fetch auth data and uuid of the users.
         :param create_conversation: fetch conversation_id.
 
@@ -113,7 +113,7 @@ class ConversationTests:
         user1, user2 = create_users
         params = {"user_id": user2['uuid'], "tagsFilter": "-"}
         event_name = 'conversationsWith'
-        result, elapsed = queries.execute_gql(endpoint=env_config.mercury_endpoint,
+        result, elapsed = queries.execute_gql(endpoint=env_config.graphql_endpoint,
                                               user=user1,
                                               headers=env_config.gql_headers,
                                               raw_body='resources/gql_payload/queries/conversationsWith.graphql',
@@ -136,7 +136,7 @@ class ConversationTests:
     @mark.add_conversation_tag
     def test_as_a_participant_i_want_to_add_conversation_tag(self, env_config, create_users, create_conversation):
         """
-        :param env_config: fetch the environment configs: mercury_endpoint, domain, ect.
+        :param env_config: fetch the environment configs: graphql_endpoint, domain, ect.
         :param create_users: fetch auth data and uuid of the users.
         :param create_conversation: fetch conversation_id.
 
@@ -156,7 +156,7 @@ class ConversationTests:
         event_name = 'addConversationTag'
 
         # Add tag to the conversation:
-        _, elapsed = queries.execute_gql(endpoint=env_config.mercury_endpoint,
+        _, elapsed = queries.execute_gql(endpoint=env_config.graphql_endpoint,
                                          user=user1,
                                          headers=env_config.gql_headers,
                                          raw_body=f'resources/gql_payload/mutations/{event_name}.graphql',
@@ -167,7 +167,7 @@ class ConversationTests:
         # Assert tag has been added :
         event_name = 'conversations'
         params = {"conversation_id": conversation_id, "tagsFilter": "conspector"}
-        result, _ = queries.execute_gql(endpoint=env_config.mercury_endpoint,
+        result, _ = queries.execute_gql(endpoint=env_config.graphql_endpoint,
                                         user=user1,
                                         headers=env_config.gql_headers,
                                         raw_body=f'resources/gql_payload/queries/{event_name}.graphql',
@@ -184,7 +184,7 @@ class ConversationTests:
     @mark.remove_conversation_tag
     def test_as_a_participant_i_want_to_remove_conversation_tag(self, env_config, create_users, create_conversation):
         """
-        :param env_config: fetch the environment configs: mercury_endpoint, domain, ect.
+        :param env_config: fetch the environment configs: graphql_endpoint, domain, ect.
         :param create_users: fetch auth data and uuid of the users.
         :param create_conversation: fetch conversation_id.
 
@@ -204,7 +204,7 @@ class ConversationTests:
 
         # Remove tag from the conversation:
         params = {"conversationApiId": conversation_api_id, "tagName": "conspector"}
-        _, elapsed = queries.execute_gql(endpoint=env_config.mercury_endpoint,
+        _, elapsed = queries.execute_gql(endpoint=env_config.graphql_endpoint,
                                          user=user1,
                                          headers=env_config.gql_headers,
                                          raw_body=f'resources/gql_payload/mutations/{event_name}.graphql',
@@ -215,7 +215,7 @@ class ConversationTests:
         # Assert tag has been removed :
         event_name = 'conversations'
         params = {"conversation_id": conversation_id, "tagsFilter": "conspector"}
-        result, _ = queries.execute_gql(endpoint=env_config.mercury_endpoint,
+        result, _ = queries.execute_gql(endpoint=env_config.graphql_endpoint,
                                         user=user1,
                                         headers=env_config.gql_headers,
                                         raw_body=f'resources/gql_payload/queries/{event_name}.graphql',

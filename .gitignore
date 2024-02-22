@@ -8,3 +8,4 @@ venv
 results*.html
 .DS_Store
 notes.txt
+access_keys.json

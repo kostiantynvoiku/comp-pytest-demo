@@ -21,7 +21,7 @@ class UserPresenceTests:
         q = Queries()
         user1, _ = create_users
         event_name = 'lastSeen'
-        result, elapsed = q.execute_gql(endpoint=env_config.mercury_endpoint,
+        result, elapsed = q.execute_gql(endpoint=env_config.graphql_endpoint,
                                         user=user1,
                                         headers=env_config.gql_headers,
                                         raw_body=f'resources/gql_payload/mutations/{event_name}.graphql')
@@ -94,7 +94,7 @@ class UserPresenceTests:
         q = Queries()
         user1, _ = create_users
         event_name = 'userMeta'
-        result, elapsed = q.execute_gql(endpoint=env_config.mercury_endpoint,
+        result, elapsed = q.execute_gql(endpoint=env_config.graphql_endpoint,
                                         user=user1,
                                         headers=env_config.gql_headers,
                                         raw_body='resources/gql_payload/queries/userMeta.graphql')
@@ -106,14 +106,14 @@ class UserPresenceTests:
         print(f"[INFO] Elapsed time: {elapsed} ms")
 
     @mark.participants_with_unread_messages
-    def test_as_mercury_i_want_to_get_a_list_of_users_with_unread_messages(self, env_config, create_users):
+    def test_as_system_i_want_to_get_a_list_of_users_with_unread_messages(self, env_config, create_users):
 
         q = Queries()
         user1, _ = create_users
         event_name = 'participantsWithUnreadMessages'
         time = datetime.now() - timedelta(hours=24)
         timestamp = round(time.timestamp())
-        result, elapsed = q.execute_gql(endpoint=env_config.mercury_endpoint,
+        result, elapsed = q.execute_gql(endpoint=env_config.graphql_endpoint,
                                         user=user1,
                                         headers=env_config.gql_headers,
                                         raw_body='resources/gql_payload/queries/participantsWithUnreadMessages.graphql',
